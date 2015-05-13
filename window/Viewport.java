@@ -13,8 +13,9 @@ public class Viewport {
 	private int width;
 	private int height;
 	private final DoubleBuffer perspective;
+	private Renderer renderer;
 
-	public Viewport(WindowManager manager, int index, int x, int y) {
+	Viewport(WindowManager manager, int index, int x, int y) {
 		this.manager = manager;
 		this.index = index;
 		this.x = x;
@@ -22,7 +23,17 @@ public class Viewport {
 		this.perspective = BufferUtils.createDoubleBuffer(16);
 		calculateSize();
 	}
-
+	
+	public void setRenderer(Renderer renderer) {
+		this.renderer = renderer;
+	}
+	
+	void render(){
+		if(renderer==null)
+			return;
+		renderer.render(this);
+	}
+	
 	public void calculateSize() {
 		int[] size = new int[2];
 		Window w = manager.getWindow(index);

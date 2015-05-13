@@ -71,6 +71,10 @@ public class Window {
 		}
 	}
 
+	public boolean isValid() {
+		return window != 0;
+	}
+
 	public int getGridHeight() {
 		return gridHeight;
 	}
@@ -94,7 +98,7 @@ public class Window {
 	public void clear() {
 		if (current != this)
 			return;
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
 }
