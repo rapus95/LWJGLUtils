@@ -18,34 +18,36 @@ public class WindowManager {
 	public WindowManager(int count) {
 		maxWindows = count;
 	}
-	
+
 	public Viewport createViewport(int index, int x, int y) {
 		Window w = windows.get(index);
-		if(w==null || x<0 || y<0|| x>=w.getGridWidth() || y>=w.getGridHeight()){
+		if (w == null || x < 0 || y < 0 || x >= w.getGridWidth() || y >= w.getGridHeight()) {
 			System.out.println("Error: not a valid Viewport position");
 			return null;
 		}
-		return new Viewport(this, index, x, y);
+		Viewport vp = new Viewport(this, index, x, y);
+		map.get(w).add(vp);
+		return vp;
 	}
 
 	public void setPosition(int index, int x, int y) {
 		GLFW.glfwSetWindowPos(getWindowID(index), x, y);
 	}
-	
+
 	public void disposeWindow(int index) {
-		if(index<0){
-			for(int i=0; i<windows.size(); i++){
+		if (index < 0) {
+			for (int i = 0; i < windows.size(); i++) {
 				_disposeWindow(i);
 			}
-		}else{
+		} else {
 			_disposeWindow(index);
 		}
 
 	}
-	
-	private void _disposeWindow(int index){
+
+	private void _disposeWindow(int index) {
 		Window w = windows.get(index);
-		if(w!=null)
+		if (w != null)
 			w.dispose();
 	}
 
@@ -81,19 +83,19 @@ public class WindowManager {
 	}
 
 	public void renderWindow(int index) {
-		if(index<0){
-			for(int i=0; i<windows.size(); i++){
+		if (index < 0) {
+			for (int i = 0; i < windows.size(); i++) {
 				_renderWindow(i);
 			}
-		}else{
+		} else {
 			_renderWindow(index);
 		}
 
 	}
-	
-	private void _renderWindow(int index){
+
+	private void _renderWindow(int index) {
 		Window w = windows.get(index);
-		if(w==null || !w.isValid())
+		if (w == null || !w.isValid())
 			return;
 		for (Viewport vp : map.get(w)) {
 			vp.render();
@@ -121,6 +123,13 @@ public class WindowManager {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
+	public int createWindow(int width, int height, String title) {
+		int i=0;
+		while(i < windows.size() && windows.get(i) != null) i++;
+		createWindow(i, width, height, title);
+		return i;
+	}
+
 	public void createWindow(int index, int width, int height, String title) {
 		if (index < 0 || (maxWindows > 0 && index >= maxWindows)) {
 			System.out.println("Error: not a valid window ID");
@@ -128,9 +137,14 @@ public class WindowManager {
 		}
 		while (index >= windows.size())
 			windows.add(null);
-		if (windows.get(index) != null)
+		Window w = windows.get(index);
+		if (w != null) {
 			System.out.println("Warning: reassigning window");
-		windows.set(index, new Window(width, height, title));
+			w.dispose();
+		}
+		w = new Window(width, height, title);
+		windows.set(index, w);
+		map.put(w, new ArrayList<Viewport>());
 
 	}
 }

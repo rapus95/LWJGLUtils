@@ -34,6 +34,10 @@ public class Viewport {
 		renderer.render(this);
 	}
 	
+	public boolean isValid() {
+		return manager.getWindow(index).isValid();
+	}
+	
 	public void calculateSize() {
 		int[] size = new int[2];
 		Window w = manager.getWindow(index);
