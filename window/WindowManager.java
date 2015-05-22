@@ -135,6 +135,7 @@ public class WindowManager {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	public int createWindow(int width, int height, boolean fullscreen, String title) {
