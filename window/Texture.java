@@ -8,8 +8,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
-
 import org.lwjgl.opengl.GL11;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
