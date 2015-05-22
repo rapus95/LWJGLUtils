@@ -98,9 +98,12 @@ public class Window {
 	}
 	
 	public void setFullscreen(boolean enable){
+		if(fullscreen == enable)
+			return;
 		if(enable){
-			setSize(GLFWvidmode.width(vidmode), GLFWvidmode.height(vidmode));
+//			setSize(GLFWvidmode.width(vidmode), GLFWvidmode.height(vidmode));
 		}
+		fullscreen = enable;
 	}
 
 	public boolean isValid() {
