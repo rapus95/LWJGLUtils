@@ -1,5 +1,6 @@
 package window;
 
+import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 
 public class WindowManager {
@@ -14,6 +16,7 @@ public class WindowManager {
 	private final List<Window> windows = new ArrayList<>();
 	private final int maxWindows;
 	private final Map<Window, List<Viewport>> map = new HashMap<>();
+	private static ByteBuffer vidmode;
 
 	public WindowManager(int count) {
 		maxWindows = count;
@@ -31,7 +34,18 @@ public class WindowManager {
 	}
 
 	public void setPosition(int index, int x, int y) {
-		GLFW.glfwSetWindowPos(getWindowID(index), x, y);
+		getWindow(index).setPosition(x, y);
+	}
+	
+	public void setCenter(int index) {
+		if(vidmode==null)
+			vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+		if(vidmode==null)
+			return;
+		Window w = getWindow(index);
+		int x = (int) ((GLFWvidmode.width(vidmode) - w.unsecure_width) / 2);
+		int y = (int) ((GLFWvidmode.height(vidmode) - w.unsecure_height) / 4);
+		setPosition(index, x, y);
 	}
 
 	public void disposeWindow(int index) {
@@ -56,7 +70,7 @@ public class WindowManager {
 	}
 
 	public int getWindowCount() {
-		return windows.size();
+		return maxWindows;
 	}
 
 	public long getWindowID(int index) {
@@ -123,14 +137,14 @@ public class WindowManager {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
-	public int createWindow(int width, int height, String title) {
+	public int createWindow(int width, int height, boolean fullscreen, String title) {
 		int i=0;
 		while(i < windows.size() && windows.get(i) != null) i++;
-		createWindow(i, width, height, title);
+		createWindow(i, width, height, fullscreen, title);
 		return i;
 	}
 
-	public void createWindow(int index, int width, int height, String title) {
+	public void createWindow(int index, int width, int height, boolean fullscreen, String title) {
 		if (index < 0 || (maxWindows > 0 && index >= maxWindows)) {
 			System.out.println("Error: not a valid window ID");
 			return;
@@ -142,7 +156,7 @@ public class WindowManager {
 			System.out.println("Warning: reassigning window");
 			w.dispose();
 		}
-		w = new Window(width, height, title);
+		w = new Window(width, height, fullscreen?GLFW.glfwGetPrimaryMonitor():0, title);
 		windows.set(index, w);
 		map.put(w, new ArrayList<Viewport>());
 

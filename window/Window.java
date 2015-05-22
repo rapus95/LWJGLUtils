@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
@@ -16,14 +17,25 @@ public class Window {
 	private static Window current;
 
 	long window;
+	
+	double unsecure_width;
+	double unsecure_height;
+	
+	double posX;
+	double posY;
+	
+	boolean fullscreen;
 
 	int gridWidth = 1;
 	int gridHeight = 1;
 
-	public Window(int width, int height, String title) {
+	public Window(int width, int height, long fullscreen, String title) {
+		this.unsecure_width = width;
+		this.unsecure_height = height;
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GL11.GL_FALSE);
-		window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+		window = GLFW.glfwCreateWindow(width, height, title, fullscreen, 0);
+		this.fullscreen = fullscreen!=0;
 		if (window == 0) {
 			throw new RuntimeException("Failed to create the GLFW window");
 		}
@@ -49,8 +61,8 @@ public class Window {
 		xpos.position(0);
 		ypos.position(0);
 		GLFW.glfwGetWindowSize(window, xpos, ypos);
-		buff[0] = xpos.get(0);
-		buff[1] = ypos.get(0);
+		unsecure_width = buff[0] = xpos.get(0);
+		unsecure_height = buff[1] = ypos.get(0);
 	}
 
 	public void draw() {
@@ -68,6 +80,26 @@ public class Window {
 		if (window != 0) {
 			GLFW.glfwDestroyWindow(window);
 			window = 0;
+		}
+	}
+	
+	public void setPosition(int x, int y){
+		if(fullscreen)
+			return;
+		posX = x;
+		posY = y;
+		GLFW.glfwSetWindowPos(window, x, y);
+	}
+	
+	public void setSize(int width, int height){
+		unsecure_width = width;
+		unsecure_height = height;
+		GLFW.glfwSetWindowSize(window, width, height);
+	}
+	
+	public void setFullscreen(boolean enable){
+		if(enable){
+			setSize(GLFWvidmode.width(vidmode), GLFWvidmode.height(vidmode));
 		}
 	}
 
