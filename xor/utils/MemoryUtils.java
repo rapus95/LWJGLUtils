@@ -1,4 +1,4 @@
-package xor.model;
+package xor.utils;
 
 import java.nio.ByteOrder;
 

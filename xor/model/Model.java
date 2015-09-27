@@ -20,6 +20,14 @@ public class Model {
 		}
 	}
 
+	public ModelTime startAnimation(String name){
+		return null;
+	}
+	
+	public static class ModelTime{
+		
+	}
+	
 	public static class Material {
 
 		public Texture texture;

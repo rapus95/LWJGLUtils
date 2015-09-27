@@ -15,10 +15,16 @@ import xor.opengl.OpenGLObject;
 
 public class Texture extends OpenGLObject {
 
-	private int type;
+	protected int type;
 
+	protected int width;
+	
+	protected int height;
+	
 	public Texture(int type, int width, int height) {
 		this.type = type;
+		this.width = width;
+		this.height = height;
 		id = GL11.glGenTextures();
 		bind(0);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, type, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);

@@ -47,8 +47,8 @@ public abstract class Mat2 extends Mat<Mat2, Mat2, Vec2> {
 	public Vec2 mul(Vec2 v) {
 		final float vx = v.x();
 		final float vy = v.y();
-		final float x = get(0, 0) * vx + get(1, 0) * vy;
-		final float y = get(0, 1) * vx + get(1, 1) * vy;
+		final float x = get(0, 0) * vx + get(0, 1) * vy;
+		final float y = get(1, 0) * vx + get(1, 1) * vy;
 		return Vec.Vec2(x, y);
 	}
 

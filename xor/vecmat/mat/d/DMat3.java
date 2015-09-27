@@ -74,9 +74,9 @@ public abstract class DMat3 extends DMat<DMat3, DMat3, DVec3> {
 		final double x = v.get(0);
 		final double y = v.get(1);
 		final double z = v.get(2);
-		final double xx = t00 * x + t10 * y + t20 * z;
-		final double yy = t01 * x + t11 * y + t21 * z;
-		final double zz = t02 * x + t12 * y + t22 * z;
+		final double xx = t00 * x + t01 * y + t02 * z;
+		final double yy = t10 * x + t11 * y + t12 * z;
+		final double zz = t20 * x + t21 * y + t22 * z;
 		return DVec.DVec3(xx, yy, zz);
 	}
 

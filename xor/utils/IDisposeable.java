@@ -1,4 +1,4 @@
-package xor.opengl;
+package xor.utils;
 
 public interface IDisposeable {
 

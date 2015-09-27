@@ -1,28 +1,29 @@
 package window;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import xor.buffer.BufferUtils;
+import xor.buffer.RecycleBuffer;
+import xor.utils.Disposeable;
 import control.CursorKey;
 import control.KeyboardKey;
+import control.MouseKey;
 
-public class Window {
+public class Window extends Disposeable {
 
 	private static Window current;
 
 	long window;
 	
-	double unsecure_width;
-	double unsecure_height;
+	int unsecure_width;
+	int unsecure_height;
 	
-	double posX;
-	double posY;
+	int posX;
+	int posY;
 	
 	boolean fullscreen;
 
@@ -30,6 +31,10 @@ public class Window {
 	int gridHeight = 1;
 
 	public Window(int width, int height, long fullscreen, String title) {
+		this(width, height, fullscreen, title, true);
+	}
+	
+	public Window(int width, int height, long fullscreen, String title, boolean grabCursor) {
 		this.unsecure_width = width;
 		this.unsecure_height = height;
 		GLFW.glfwDefaultWindowHints();
@@ -41,28 +46,32 @@ public class Window {
 		}
 		activate();
 		GLContext.createFromCurrent();
-		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+		if(grabCursor)
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 		GLFW.glfwSetKeyCallback(window, KeyboardKey.KEY_CALLBACK);
 		GLFW.glfwSetCursorPosCallback(window, CursorKey.CURSOR_CALLBACK);
+		GLFW.glfwSetMouseButtonCallback(window, MouseKey.KEY_CALLBACK);
 		GLFW.glfwShowWindow(window);
-		GLFW.glfwSetCursorPos(window, 0, 0);
+		if(grabCursor)
+			GLFW.glfwSetCursorPos(window, 0, 0);
 	}
 
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(window) != 0;
 	}
 
-	private static final IntBuffer xpos = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
-	private static final IntBuffer ypos = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
+	//private static final IntBuffer xpos = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
+	//private static final IntBuffer ypos = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
 
 	public void getSize(int[] buff) {
 		if (buff.length != 2)
 			throw new IllegalArgumentException();
-		xpos.position(0);
-		ypos.position(0);
-		GLFW.glfwGetWindowSize(window, xpos, ypos);
-		unsecure_width = buff[0] = xpos.get(0);
-		unsecure_height = buff[1] = ypos.get(0);
+		RecycleBuffer rb = RecycleBuffer.allocateDirect(8);
+		IntBuffer pos = rb.asByteBuffer().asIntBuffer();
+		GLFW.glfwGetWindowSize(window, pos, BufferUtils.atPosition(pos, 1));
+		unsecure_width = buff[0] = pos.get(0);
+		unsecure_height = buff[1] = pos.get(1);
+		rb.recycle();
 	}
 
 	public void draw() {
@@ -73,13 +82,6 @@ public class Window {
 		if (current != this) {
 			current = this;
 			GLFW.glfwMakeContextCurrent(window);
-		}
-	}
-
-	public void dispose() {
-		if (window != 0) {
-			GLFW.glfwDestroyWindow(window);
-			window = 0;
 		}
 	}
 	
@@ -134,6 +136,15 @@ public class Window {
 		if (current != this)
 			return;
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	}
+
+	@Override
+	protected boolean pdispose() {
+		if (window != 0) {
+			GLFW.glfwDestroyWindow(window);
+			window = 0;
+		}
+		return false;
 	}
 
 }

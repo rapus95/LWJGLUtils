@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
 
-import xor.model.DataInputStreamEx;
+import xor.utils.DataInputStreamEx;
 
 public class MS3DModel {
 

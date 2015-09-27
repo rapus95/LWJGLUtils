@@ -11,7 +11,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 
-public class WindowManager {
+import xor.utils.Disposeable;
+
+public class WindowManager extends Disposeable {
 
 	private final List<Window> windows = new ArrayList<>();
 	private final int maxWindows;
@@ -23,7 +25,8 @@ public class WindowManager {
 	}
 
 	public Viewport createViewport(int index, int x, int y) {
-		Window w = windows.get(index);
+		checkDisposed();
+		Window w = getWindow(index);
 		if (w == null || x < 0 || y < 0 || x >= w.getGridWidth() || y >= w.getGridHeight()) {
 			System.out.println("Error: not a valid Viewport position");
 			return null;
@@ -38,6 +41,7 @@ public class WindowManager {
 	}
 	
 	public void setCenter(int index) {
+		checkDisposed();
 		if(vidmode==null)
 			vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		if(vidmode==null)
@@ -49,6 +53,7 @@ public class WindowManager {
 	}
 
 	public void disposeWindow(int index) {
+		checkDisposed();
 		if (index < 0) {
 			for (int i = 0; i < windows.size(); i++) {
 				_disposeWindow(i);
@@ -60,43 +65,46 @@ public class WindowManager {
 	}
 
 	private void _disposeWindow(int index) {
-		Window w = windows.get(index);
+		Window w = getWindow(index);
 		if (w != null)
 			w.dispose();
 	}
 
 	public Window getWindow(int i) {
+		checkDisposed();
 		return windows.get(i);
 	}
 
 	public int getWindowCount() {
+		checkDisposed();
 		return maxWindows;
 	}
 
 	public long getWindowID(int index) {
-		return windows.get(index).getWindowID();
+		return getWindow(index).getWindowID();
 	}
 
 	public boolean shallCloseWindow(int index) {
-		return windows.get(index).shouldClose();
+		return getWindow(index).shouldClose();
 	}
 
 	public WindowManager activateWindow(int index) {
-		windows.get(index).activate();
+		getWindow(index).activate();
 		return this;
 	}
 
 	public WindowManager clearWindow(int index) {
-		windows.get(index).clear();
+		getWindow(index).clear();
 		return this;
 	}
 
 	public WindowManager drawWindow(int index) {
-		windows.get(index).draw();
+		getWindow(index).draw();
 		return this;
 	}
 
 	public void renderWindow(int index) {
+		checkDisposed();
 		if (index < 0) {
 			for (int i = 0; i < windows.size(); i++) {
 				_renderWindow(i);
@@ -108,7 +116,7 @@ public class WindowManager {
 	}
 
 	private void _renderWindow(int index) {
-		Window w = windows.get(index);
+		Window w = getWindow(index);
 		if (w == null || !w.isValid())
 			return;
 		for (Viewport vp : map.get(w)) {
@@ -117,6 +125,7 @@ public class WindowManager {
 	}
 
 	public void setupWindow(int index, DoubleBuffer projectionMatrix) {
+		checkDisposed();
 		if (index < 0)
 			for (int i = 0; i < getWindowCount(); i++) {
 				_setupWindow(i, projectionMatrix);
@@ -139,20 +148,22 @@ public class WindowManager {
 	}
 
 	public int createWindow(int width, int height, boolean fullscreen, String title) {
+		checkDisposed();
 		int i=0;
-		while(i < windows.size() && windows.get(i) != null) i++;
+		while(i < windows.size() && getWindow(i) != null) i++;
 		createWindow(i, width, height, fullscreen, title);
 		return i;
 	}
 
 	public void createWindow(int index, int width, int height, boolean fullscreen, String title) {
+		checkDisposed();
 		if (index < 0 || (maxWindows > 0 && index >= maxWindows)) {
 			System.out.println("Error: not a valid window ID");
 			return;
 		}
 		while (index >= windows.size())
 			windows.add(null);
-		Window w = windows.get(index);
+		Window w = getWindow(index);
 		if (w != null) {
 			System.out.println("Warning: reassigning window");
 			w.dispose();
@@ -162,4 +173,15 @@ public class WindowManager {
 		map.put(w, new ArrayList<Viewport>());
 
 	}
+
+	@Override
+	protected boolean pdispose() {
+		for(Window window:windows){
+			window.dispose();
+		}
+		windows.clear();
+		map.clear();
+		return false;
+	}
+	
 }

@@ -1,4 +1,4 @@
-package xor.model;
+package xor.utils;
 
 import java.io.DataInput;
 import java.io.DataInputStream;

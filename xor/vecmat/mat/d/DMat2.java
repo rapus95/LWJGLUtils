@@ -47,8 +47,8 @@ public abstract class DMat2 extends DMat<DMat2, DMat2, DVec2> {
 	public DVec2 mul(DVec2 v) {
 		final double vx = v.x();
 		final double vy = v.y();
-		final double x = get(0, 0) * vx + get(1, 0) * vy;
-		final double y = get(0, 1) * vx + get(1, 1) * vy;
+		final double x = get(0, 0) * vx + get(0, 1) * vy;
+		final double y = get(1, 0) * vx + get(1, 1) * vy;
 		return DVec.DVec2(x, y);
 	}
 

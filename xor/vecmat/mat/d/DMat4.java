@@ -10,12 +10,12 @@ public abstract class DMat4 extends DMat<DMat4, DMat4, DVec4> {
 
 	@Override
 	public int n() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public int m() {
-		return 3;
+		return 4;
 	}
 
 	@Override
@@ -104,10 +104,10 @@ public abstract class DMat4 extends DMat<DMat4, DMat4, DVec4> {
 		final double y = v.get(1);
 		final double z = v.get(2);
 		final double w = v.get(3);
-		final double xx = t00 * x + t10 * y + t20 * z + t30 * w;
-		final double yy = t01 * x + t11 * y + t21 * z + t31 * w;
-		final double zz = t02 * x + t12 * y + t22 * z + t32 * w;
-		final double ww = t03 * x + t13 * y + t23 * z + t33 * w;
+		final double xx = t00 * x + t01 * y + t02 * z + t03 * w;
+		final double yy = t10 * x + t11 * y + t12 * z + t13 * w;
+		final double zz = t20 * x + t21 * y + t22 * z + t23 * w;
+		final double ww = t30 * x + t31 * y + t32 * z + t33 * w;
 		return DVec.DVec4(xx, yy, zz, ww);
 	}
 

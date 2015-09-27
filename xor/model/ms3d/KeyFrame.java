@@ -3,7 +3,7 @@ package xor.model.ms3d;
 import java.io.DataInput;
 import java.io.IOException;
 
-import xor.model.DataInputStreamEx;
+import xor.utils.DataInputStreamEx;
 import xor.vecmat.vec.f.Vec3;
 
 public class KeyFrame {

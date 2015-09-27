@@ -6,20 +6,21 @@ import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
-public class KeyboardKey implements Key {
+public class MouseKey implements Key {
 	
-	private static final Map<Integer, WeakReference<KeyboardKey>> KEYS = new HashMap<Integer, WeakReference<KeyboardKey>>();
+	private static final Map<Integer, WeakReference<MouseKey>> KEYS = new HashMap<Integer, WeakReference<MouseKey>>();
 	
-	public static final GLFWKeyCallback KEY_CALLBACK = new GLFWKeyCallback(){
+	public static final GLFWMouseButtonCallback KEY_CALLBACK = new GLFWMouseButtonCallback(){
 
 		@Override
-		public void invoke(long window, int key, int scancode, int action, int mods) {
-			WeakReference<KeyboardKey> wr = KEYS.get(key);
+		public void invoke(long window, int button, int action, int mods) {
+			WeakReference<MouseKey> wr = KEYS.get(button);
 			if(wr!=null){
-				KeyboardKey kk = wr.get();
+				MouseKey kk = wr.get();
 				if(kk==null){
-					KEYS.remove(key);
+					KEYS.remove(button);
 				}else{
 					kk.state = (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT);
 				}
@@ -28,11 +29,11 @@ public class KeyboardKey implements Key {
 		
 	};
 	
-	public static KeyboardKey getKey(int key){
-		WeakReference<KeyboardKey> wr = KEYS.get(key);
-		KeyboardKey kk;
+	public static MouseKey getKey(int key){
+		WeakReference<MouseKey> wr = KEYS.get(key);
+		MouseKey kk;
 		if(wr==null || (kk=wr.get())==null){
-			kk = new KeyboardKey(key);
+			kk = new MouseKey(key);
 			KEYS.put(key, new WeakReference<>(kk));
 		}
 		return kk;
@@ -41,7 +42,7 @@ public class KeyboardKey implements Key {
 	private final int key;
 	private boolean state;
 	
-	private KeyboardKey(int key){
+	private MouseKey(int key){
 		this.key = key;
 	}
 	

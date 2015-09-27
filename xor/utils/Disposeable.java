@@ -1,4 +1,5 @@
-package xor.opengl;
+package xor.utils;
+
 
 public abstract class Disposeable implements IDisposeable {
 
@@ -16,6 +17,15 @@ public abstract class Disposeable implements IDisposeable {
 		flags &= ~DISPOSE;
 	}
 
+	protected boolean disposed(){
+		return (flags & DISPOSED)!=0;
+	}
+	
+	protected void checkDisposed(){
+		if(disposed())
+			throw new IllegalStateException("Disposed");
+	}
+	
 	@Override
 	public final void dispose() {
 		internDispose(false);
@@ -27,7 +37,7 @@ public abstract class Disposeable implements IDisposeable {
 	}
 
 	private void internDispose(boolean finalizer) {
-		if ((flags & DD_MASK) != 1)
+		if ((flags & DD_MASK) != DISPOSE)
 			return;
 		flags |= DISPOSED;
 		if (dispose(false)) {
@@ -40,5 +50,5 @@ public abstract class Disposeable implements IDisposeable {
 	}
 
 	protected abstract boolean pdispose();
-
+	
 }

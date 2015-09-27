@@ -10,12 +10,12 @@ public abstract class Mat4 extends Mat<Mat4, Mat4, Vec4> {
 
 	@Override
 	public int n() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public int m() {
-		return 3;
+		return 4;
 	}
 
 	@Override
@@ -104,10 +104,10 @@ public abstract class Mat4 extends Mat<Mat4, Mat4, Vec4> {
 		final float y = v.get(1);
 		final float z = v.get(2);
 		final float w = v.get(3);
-		final float xx = t00 * x + t10 * y + t20 * z + t30 * w;
-		final float yy = t01 * x + t11 * y + t21 * z + t31 * w;
-		final float zz = t02 * x + t12 * y + t22 * z + t32 * w;
-		final float ww = t03 * x + t13 * y + t23 * z + t33 * w;
+		final float xx = t00 * x + t01 * y + t02 * z + t03 * w;
+		final float yy = t10 * x + t11 * y + t12 * z + t13 * w;
+		final float zz = t20 * x + t21 * y + t22 * z + t23 * w;
+		final float ww = t30 * x + t31 * y + t32 * z + t33 * w;
 		return Vec.Vec4(xx, yy, zz, ww);
 	}
 

@@ -74,9 +74,9 @@ public abstract class Mat3 extends Mat<Mat3, Mat3, Vec3> {
 		final float x = v.get(0);
 		final float y = v.get(1);
 		final float z = v.get(2);
-		final float xx = t00 * x + t10 * y + t20 * z;
-		final float yy = t01 * x + t11 * y + t21 * z;
-		final float zz = t02 * x + t12 * y + t22 * z;
+		final float xx = t00 * x + t01 * y + t02 * z;
+		final float yy = t10 * x + t11 * y + t12 * z;
+		final float zz = t20 * x + t21 * y + t22 * z;
 		return Vec.Vec3(xx, yy, zz);
 	}
 

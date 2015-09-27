@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.util.Arrays;
 
-import xor.model.DataInputStreamEx;
+import xor.utils.DataInputStreamEx;
 
 public class Group {
 

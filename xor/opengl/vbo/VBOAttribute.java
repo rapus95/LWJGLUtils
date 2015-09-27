@@ -9,6 +9,7 @@ import xor.opengl.shader.ShaderAttribute;
 
 public final class VBOAttribute {
 
+	public static final VBOAttribute POS2F = new VBOAttribute(ShaderAttribute.VERTEX_NAME, Cast.INSTANCE, 0, 0);
 	public static final VBOAttribute POS3F = new VBOAttribute(ShaderAttribute.VERTEX_NAME, Cast.INSTANCE, 0, 0, 0);
 	public static final VBOAttribute POS4F = new VBOAttribute(ShaderAttribute.VERTEX_NAME, Cast.INSTANCE, 0, 0, 0, 1);
 	public static final VBOAttribute TEXCOORD2F = new VBOAttribute(ShaderAttribute.TEXCOORD_NAME, Cast.INSTANCE, 0, 0);
