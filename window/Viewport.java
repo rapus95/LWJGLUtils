@@ -59,7 +59,7 @@ public class Viewport {
 		GL11.glLoadIdentity();
 		if (perspective != null) {
 			perspective.rewind();
-			GL11.glMultMatrixd(perspective);
+			GL11.glMultMatrix(perspective);
 		}
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();

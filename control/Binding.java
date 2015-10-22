@@ -13,7 +13,7 @@ public class Binding implements Updateable {
 	public static Binding create(Key key) {
 		return create(key, null);
 	}
-	
+
 	public static Binding createAndDefault(Key key) {
 		return create(key, key);
 	}
@@ -30,6 +30,10 @@ public class Binding implements Updateable {
 	}
 
 	public void update() {
+		if (key == null) {
+			delta = 0;
+			state = 0;
+		}
 		double nstate = key.getState();
 		delta = nstate - state;
 		state = nstate;
@@ -70,6 +74,14 @@ public class Binding implements Updateable {
 
 	public boolean isEndPressed() {
 		return delta < -0.5;
+	}
+
+	public boolean isBound() {
+		return key != null;
+	}
+
+	public Key getKey() {
+		return key;
 	}
 
 }

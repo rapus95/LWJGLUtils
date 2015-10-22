@@ -15,9 +15,9 @@ import xor.utils.Disposeable;
 
 public class WindowManager extends Disposeable {
 
-	private final List<Window> windows = new ArrayList<>();
+	private final List<Window> windows = new ArrayList<Window>();
 	private final int maxWindows;
-	private final Map<Window, List<Viewport>> map = new HashMap<>();
+	private final Map<Window, List<Viewport>> map = new HashMap<Window, List<Viewport>>();
 	private static ByteBuffer vidmode;
 
 	public WindowManager(int count) {
@@ -140,7 +140,7 @@ public class WindowManager extends Disposeable {
 		GL11.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glMultMatrixd(projectionMatrix);
+		GL11.glMultMatrix(projectionMatrix);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

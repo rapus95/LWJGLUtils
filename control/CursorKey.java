@@ -2,6 +2,7 @@ package control;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
 public class CursorKey implements Key {
 
@@ -9,12 +10,14 @@ public class CursorKey implements Key {
 
 	private static double delta_xpos;
 	private static double delta_ypos;
+	private static double delta_wpos;
 
 	private static double xpos;
 	private static double ypos;
 
-	private static double xpos_current;
-	private static double ypos_current;
+	public static double xpos_current;
+	public static double ypos_current;
+	public static double wpos_current;
 
 	private static double clamp_posX = -1;
 	private static double clamp_negX = -1;
@@ -38,6 +41,15 @@ public class CursorKey implements Key {
 		}
 
 	};
+	
+	public static final GLFWScrollCallback WHEEL_CALLBACK = new GLFWScrollCallback() {
+
+		@Override
+		public void invoke(long window, double xpos, double ypos) {
+			CursorKey.wpos_current += ypos;
+		}
+
+	};
 
 	public static void setCatched(boolean catched) {
 		CursorKey.catched = catched;
@@ -56,6 +68,8 @@ public class CursorKey implements Key {
 			delta_ypos = ypos_current - ypos;
 			ypos = ypos_current;
 		}
+		delta_wpos = wpos_current;
+		wpos_current = 0;
 	}
 	public static void setClamp(double posX, double negX, double posY, double negY) {
 		clamp_posX = posX;
@@ -81,6 +95,10 @@ public class CursorKey implements Key {
 				return delta_ypos > 0 ? delta_ypos * sensitivity : 0;
 			case 3 :
 				return delta_ypos < 0 ? -delta_ypos * sensitivity : 0;
+			case 4 :
+				return delta_wpos > 0 ? delta_wpos : 0;
+			case 5 :
+				return delta_wpos < 0 ? -delta_wpos : 0;
 		}
 		return 0;
 	}

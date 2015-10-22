@@ -33,7 +33,7 @@ public class KeyboardKey implements Key {
 		KeyboardKey kk;
 		if(wr==null || (kk=wr.get())==null){
 			kk = new KeyboardKey(key);
-			KEYS.put(key, new WeakReference<>(kk));
+			KEYS.put(key, new WeakReference<KeyboardKey>(kk));
 		}
 		return kk;
 	}

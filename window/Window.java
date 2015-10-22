@@ -51,6 +51,7 @@ public class Window extends Disposeable {
 		GLFW.glfwSetKeyCallback(window, KeyboardKey.KEY_CALLBACK);
 		GLFW.glfwSetCursorPosCallback(window, CursorKey.CURSOR_CALLBACK);
 		GLFW.glfwSetMouseButtonCallback(window, MouseKey.KEY_CALLBACK);
+		GLFW.glfwSetScrollCallback(window, CursorKey.WHEEL_CALLBACK);
 		GLFW.glfwShowWindow(window);
 		if(grabCursor)
 			GLFW.glfwSetCursorPos(window, 0, 0);

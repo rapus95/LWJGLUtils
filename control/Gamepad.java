@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 public class Gamepad {
 
 	private final static Gamepad[] gamepads = new Gamepad[16];
-	private final static Map<String, Gamepad> gamepads2 = new HashMap<>(16);
+	private final static Map<String, Gamepad> gamepads2 = new HashMap<String, Gamepad>(16);
 
 	static {
 		for (int i = 0; i < 16; i++) {

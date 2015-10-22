@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 public class MouseKey implements Key {
@@ -34,7 +33,7 @@ public class MouseKey implements Key {
 		MouseKey kk;
 		if(wr==null || (kk=wr.get())==null){
 			kk = new MouseKey(key);
-			KEYS.put(key, new WeakReference<>(kk));
+			KEYS.put(key, new WeakReference<MouseKey>(kk));
 		}
 		return kk;
 	}
